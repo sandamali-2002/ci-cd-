@@ -36,6 +36,10 @@ app.post('/students', (req, res) => {
 })
 
 const port = process.env.PORT || 4000
-app.listen(port, () => console.log(`Student API listening on ${port}`))
+
+// Start server only when this file is run directly.
+if (require.main === module) {
+  app.listen(port, () => console.log(`Student API listening on ${port}`))
+}
 
 module.exports = app

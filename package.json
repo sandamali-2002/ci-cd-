@@ -7,18 +7,16 @@
     "dev": "vite",
     "test:selenium": "mocha \"./e2e/selenium/*.cjs\" --timeout 60000 --exit",
     "start:api": "node server/index.js",
-  "test:api": "jest \"server/__tests__\" --runInBand",
+    "test:api": "jest \"server/__tests__\" --runInBand",
     "test:e2e": "start-server-and-test \"npm run start:api\" http://localhost:4000 \"npm run test:selenium\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
-
-
-
-
-
   "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
