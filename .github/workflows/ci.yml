@@ -12,9 +12,6 @@ jobs:
     env:
       PREVIEW_PORT: '5173'
 
-    services:
-      # no services needed; we'll run node servers directly in steps
-
     steps:
       - uses: actions/checkout@v4
 
