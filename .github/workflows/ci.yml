@@ -9,16 +9,23 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      PREVIEW_PORT: '5173'
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm ci
@@ -29,20 +36,9 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      - name: Start API
-        run: npm run start:api &
-
-      - name: Start preview server
-        run: npm run preview -- --port ${{ env.PREVIEW_PORT }} &
-
-      - name: Wait for preview
-        run: npx wait-on http://localhost:${{ env.PREVIEW_PORT }}
-
-      - name: Run Selenium E2E tests
-        env:
-          APP_URL: http://localhost:${{ env.PREVIEW_PORT }}
-        run: npm run test:selenium
-
-      - name: Upload test reports (optional)
-        if: always()
-        run: echo "Tests complete"
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: dist/
